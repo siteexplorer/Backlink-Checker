@@ -58,8 +58,8 @@ class ApiHelper {
         throw new Exception("failed." . $json->message);
     }
     static function Normalize($url) {
-        if (strpos($url, "://") < 0) {
-            if (strpos($url, "/") < 0) {
+        if (strpos($url, "://")===false) {
+            if (!(strpos($url, "/")===false)) {
                 $url = "http://" . $url;
             } else if (strpos($url, "domain:") != 0) {
                 $url = "domain:" . $url;
