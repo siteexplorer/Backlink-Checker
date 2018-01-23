@@ -26,7 +26,7 @@ namespace System
         static string[] auths = { "test", "test" }; // for support multiple auth tokens, you must change it to your own auth IDs when it online.
         static int pos = 0;
         static object sync = new object();
-        static string auth { get { lock (sync) { pos = pos % auths.Length; return auths[pos]; } } }
+        static string auth { get { lock (sync) { pos = pos % auths.Length; return auths[pos++]; } } }
         static int maxperpage = 100;
         static string api_pagerank { get { return "http://api.siteexplorer.info/?auth=" + auth + "&type=json&mask=000&query="; } }
         static string api_metainfo { get { return "http://api.siteexplorer.info/?auth=" + auth + "&type=json&mask=100&query="; } }
