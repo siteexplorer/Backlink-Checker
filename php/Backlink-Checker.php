@@ -68,9 +68,9 @@ function BuildMeta($url) {
         $s2 = $s2 . "<td>" . $js->count . "</td>";
         if (++$c == 20) break;
     }
-    $s1 = "
+    $s1 = $s1 ."
           </tr>";
-    $s2 = "
+    $s2 = $s2 ."
         </tr>
       </table>";
     $sb = $sb . $s1 . $s2;

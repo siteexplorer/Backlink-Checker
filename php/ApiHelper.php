@@ -18,8 +18,9 @@
 class ApiHelper {
     static $apiurl = "http://api.siteexplorer.info/?auth=";
     static $auths = array("test", "test"); // for support multiple auth tokens, you must change it to your own auth IDs when it online.
-    static $pos = 0;
+    static $pos = -1;
     static function auth() {
+	if(self::$pos == -1){ self::$pos = rand(0, count(self::$auths)-1);} // as PHP not support a real static variable, it's not like the C#, JAVA
         $i = self::$pos = self::$pos % count(self::$auths);
         self::$pos++;
         return self::$auths[$i];

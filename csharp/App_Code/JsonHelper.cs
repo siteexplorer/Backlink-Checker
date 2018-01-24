@@ -14,6 +14,9 @@
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 * ------------------------------------------------------------------------
 */
+
+// this simple json class was only tested with api of siteexplorer.info, not a real json model. you can replace it if you like.
+
 namespace System
 {
     using System;

@@ -157,7 +157,7 @@
             {
                 sb.AppendFormat("<tr class='{0}'>", i % 2 == 0 ? "" : " tr-jsh", i);
                 sb.AppendFormat("<td class='rank'>{0}</td>" +
-                                "<td class='url'><a href='?f=1&url={1}'>{2}</a></td>" +
+                                "<td class='url2'><a href='?f=1&url={1}'>{2}</a></td>" +
                                 "<td class='dcount'>{3}</td>" +
                                 "<td class='dcount'>{4}+</td>",
                                 page["rank"],
@@ -175,7 +175,7 @@
     string BuildTable3(Json json)
     {
         StringBuilder sb = new StringBuilder();
-        sb.Append("<div class='result'><table class='item'><tr class='header'><th class='rank'>Rank</td><th class='domain'>Backlink URL</th><th class='anchor'>Linked Anchor</th><th class='date'>Date</th></tr>");
+        sb.Append("<div class='result'><table class='item'><tr class='header'><th class='rank'>Rank</td><th class='domain'>Backlink URL</th><th class='anchor'>Linked Anchor</th><th class='date2'>Date</th></tr>");
         Json[] results = json["backlinks"].Jsons;
         if (results.Length == 0)
         {
@@ -188,9 +188,9 @@
             {
                 sb.AppendFormat("<tr class='{0}'>", i % 2 == 0 ? "" : " tr-jsh", i);
                 sb.AppendFormat("<td class='rank'>{0}</td>" +
-                                "<td class='url'><a href='?f=1&url={1}'>{2}</a></td>" +
+                                "<td class='url2'><a href='?f=1&url={1}'>{2}</a></td>" +
                                 "<td class='dcount'>{3}</td>" +
-                                "<td class='date'>{4}</td>",
+                                "<td class='date2'>{4}</td>",
                                 page["rank"],
                                 Uri.EscapeDataString(page["url"].ToString()),
                                 page["url"],
@@ -449,12 +449,12 @@ body {
 	border-bottom: 0;
 	border-right: 1px solid #fff;
 }
-.result tr .url {
+.result tr .url2 {
 	width: 410px;
 	padding-left: 10px;
 	text-align: left;
 }
-.result tr .date {
+.result tr .date2 {
 	width: 140px;
 	text-align: left;
 }
