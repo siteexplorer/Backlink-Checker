@@ -73,6 +73,7 @@ class ApiHelper {
     }
     public static function GetPageRanks($urls) {
         if (count($urls) == 0) return null;
+		if(count($urls) > 50)$url=range($url, 0, 50); // max 50 urls per request
         $sb = "";
         foreach ($urls as $url) {
             $sb = $sb . self::Normalize($url) . '#';
@@ -88,6 +89,18 @@ class ApiHelper {
     }
     public static function GetShortMeta($url) {
         return self::CallAPI(self::api_shortmeta() . urlencode(self::Normalize($url)));
+    }
+    public static function GetShortMetas($urls) {
+        if (count($urls) == 0) return null;
+		if(count($urls) >20)$url=range($url, 0, 20); // max 20 urls per request
+        $sb = "";
+        foreach ($urls as $url) {
+            $sb = $sb . self::Normalize($url) . '#';
+            if (strlen($sb) > 2000) break; // most browser or server can't handle the url length more than 2048 chars.
+            
+        }
+        $sb = rtrim($sb, '#');
+        return self::CallAPI(self::api_shortmeta() . urlencode($sb));
     }
     public static function SearchBacklinks($url, $next) {
         return self::CallAPI(self::api_backlinks() . urlencode(self::Normalize($url)) . "&next=" . $next);
