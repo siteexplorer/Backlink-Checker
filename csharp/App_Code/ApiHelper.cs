@@ -72,6 +72,7 @@ namespace System
         public static List<string> GetPageRanks(List<string> urls)
         {
             if (urls.Count == 0) return null;
+            if (urls.Count > 50) urls.RemoveRange(50, urls.Count-50); // max 50 urls
             StringBuilder sb = new StringBuilder();
             foreach (string url in urls)
             {
@@ -95,6 +96,20 @@ namespace System
         public static Json GetShortMeta(string url)
         {
             return CallAPI(api_shortmeta + Uri.EscapeDataString(Normalize(url)));
+        }
+        public static Json GetShortMetas(List<string> urls)
+        {
+            if (urls.Count == 0) return null;
+            if (urls.Count > 20) urls.RemoveRange(20, urls.Count - 20); // max 20 urls
+            StringBuilder sb = new StringBuilder();
+            foreach (string url in urls)
+            {
+                sb.Append(Normalize(url));
+                sb.Append("#");
+                if (sb.Length > 2000) break; // most browser or server can't handle the url length more than 2048 chars.
+            }
+            sb.Length -= 1;
+            return CallAPI(api_shortmeta + Uri.EscapeDataString(sb.ToString()));
         }
         public static Json SearchBacklinks(string url, string next)
         {
