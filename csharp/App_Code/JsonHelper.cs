@@ -321,6 +321,7 @@
                                 name = null;
                             }
                             sb.Length = 0;
+                            skip = -1;
                         }
                         break;
                     case ':':
@@ -336,6 +337,7 @@
                             {
                                 name = null;
                                 sb.Length = 0;
+                                skip = -1;
                             }
                             else
                             {
@@ -344,6 +346,7 @@
                                     (name[0] == '\'' && name[name.Length - 1] == '\''))
                                 {
                                     sb.Length = 0;
+                                    skip = -1;
                                 }
                                 else
                                 {
