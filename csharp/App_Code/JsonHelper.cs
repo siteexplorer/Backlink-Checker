@@ -1,29 +1,19 @@
-﻿/**
-* Backlink Checker is based on api interface of https://siteexplorer.info.
-*
-* @author siteexplorer.info <https://siteexplorer.info/>
-* @version 0.1
-* @link https://siteexplorer.info/
-*
-* LICENSE:
-* --------
-* This program is free software; you can redistribute it and/or modify it
-*
-* This program is distributed in the hope that it will be useful, but
-* WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* ------------------------------------------------------------------------
-*/
-
-// this simple json class was only tested with api of siteexplorer.info, not a real json model. you can replace it if you like.
-
-namespace System
+﻿namespace System
 {
     using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.Collections.Specialized;
+    using System.Web;
+    using System.Web.UI;
+    using System.Web.UI.WebControls;
+    using System.IO;
+    using System.Data;
+    using System.Data.SqlClient;
     using System.Text;
+    using System.Text.RegularExpressions;
+    using System.Net;
+
     public enum JsonType
     {
         String = 0,
@@ -85,7 +75,7 @@ namespace System
         object data_ = null;
         JsonCollection JData
         {
-            get { return (JsonCollection)data_;}
+            get { return (JsonCollection)data_; }
         }
         public JsonType Type
         {
@@ -146,8 +136,9 @@ namespace System
         }
         static string J(string s)
         {
-            s = s.Replace("\"", "\\\"");
+            s = s.Replace("\\", "\\\\");
             s = s.Replace("/", "\\/");
+            s = s.Replace("\"", "\\\"");
             s = s.Replace("\n", "\\n");
             s = s.Replace("\r", "\\r");
             s = s.Replace("\t", "\\t");
@@ -244,8 +235,9 @@ namespace System
             }
             return s;
         }
-        static bool IsEnclosed(StringBuilder sb)
+        static bool IsEnclosed(StringBuilder sb, int skip)
         {
+            if (sb.Length == skip) return false;
             if (sb.Length > 0)
             {
                 string s = sb.ToString().Trim();
@@ -269,15 +261,16 @@ namespace System
         {
             string name = null;
             StringBuilder sb = new StringBuilder();
+            int skip = -1;
             while (idx < s.Length)
             {
                 if (s[idx] == ']' || s[idx] == '}')
                 {
-                    if (!IsEnclosed(sb))
+                    if (!IsEnclosed(sb, skip))
                     {
                         sb.Append(s[idx]);
                         idx++;
-                        continue ;
+                        continue;
                     }
                     break;
                 }
@@ -285,7 +278,7 @@ namespace System
                 {
                     case '[':
                         {
-                            if (!IsEnclosed(sb))
+                            if (!IsEnclosed(sb, skip))
                             {
                                 sb.Append(s[idx]);
                                 break;
@@ -301,7 +294,7 @@ namespace System
                         break;
                     case '{':
                         {
-                            if (!IsEnclosed(sb))
+                            if (!IsEnclosed(sb, skip))
                             {
                                 sb.Append(s[idx]);
                                 break;
@@ -317,7 +310,7 @@ namespace System
                         break;
                     case ',':
                         {
-                            if (!IsEnclosed(sb))
+                            if (!IsEnclosed(sb, skip))
                             {
                                 sb.Append(s[idx]);
                                 break;
@@ -331,7 +324,7 @@ namespace System
                         }
                         break;
                     case ':':
-                        if (!IsEnclosed(sb))
+                        if (!IsEnclosed(sb, skip))
                         {
                             sb.Append(s[idx]);
                             break;
@@ -346,11 +339,10 @@ namespace System
                             }
                             else
                             {
-                                if ((name[0] != '\'' && name[0] != '\'') ||
+                                if ((name[0] != '\'' && name[0] != '\"') ||
                                     (name[0] == '"' && name[name.Length - 1] == '"') ||
                                     (name[0] == '\'' && name[name.Length - 1] == '\''))
                                 {
-
                                     sb.Length = 0;
                                 }
                                 else
@@ -382,6 +374,14 @@ namespace System
                                 break;
                             case 'f':
                                 sb.Append('\f');
+                                break;
+                            case '\'':
+                                sb.Append('\'');
+                                skip = sb.Length;
+                                break;
+                            case '\"':
+                                sb.Append('\"');
+                                skip = sb.Length;
                                 break;
                             default:
                                 sb.Append(s[idx]);
